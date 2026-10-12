@@ -360,6 +360,61 @@ Optional extras:
 - Add a `GET /about` route that sends back a sentence about your band.
 - Keep a list of every band name made since the server started, and show it at `GET /history`.
 
+## Optional: make it yours (style)
+
+The Band Name Generator has no style at all yet. Give it some.
+
+1. Make a file `Middleware/public/style.css`, and link it in the `<head>` of `Middleware/public/index.html`:
+   ```html
+   <link rel="stylesheet" href="style.css">
+   ```
+   Reload `http://localhost:3000`. Notice you didn't write a route for `style.css`: `app.use(express.static("public"))` sends any file in `public` that the browser asks for.
+
+2. Style the form. A start, to paste into `style.css` and then change:
+   ```css
+   :root {
+     --main: #8e44ad;
+     --background: #fdf6e3;
+   }
+
+   body {
+     background: var(--background);
+     font-family: system-ui, sans-serif;
+     max-width: 30rem;
+     margin: 3rem auto;
+     text-align: center;
+   }
+
+   h1 {
+     color: var(--main);
+   }
+
+   input,
+   button {
+     display: block;
+     width: 100%;
+     margin: 0.5rem 0 1rem;
+     padding: 0.5rem;
+     font-size: 1rem;
+   }
+
+   button {
+     background: var(--main);
+     color: white;
+     border: none;
+     border-radius: 6px;
+     cursor: pointer;
+   }
+   ```
+   The same ideas as Lab 3 work here too: your own colours, a Google Font, dark mode.
+
+3. **The answer page.** The page that shows the band name is built in `index4.js`, inside `res.send(...)`. Add the stylesheet to the start of that string so it gets your style too:
+   ```js
+   res.send("<link rel='stylesheet' href='/style.css'><h1>Your band name is:</h1>" + ...
+   ```
+
+**Question:** add a screenshot of your styled Band Name Generator to this README.
+
 ---
 
 # Hand it in
