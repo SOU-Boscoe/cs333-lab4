@@ -1,23 +1,20 @@
 import express from "express";
 
 const app = express();
-const port = process.env.PORT ?? 3000;
+const port = 3000;
 
 function logger(req, res, next) {
-  const start = performance.now();
-  res.on("finish", () => {
-    const ms = (performance.now() - start).toFixed(1);
-    console.log(`${req.method} ${req.originalUrl} → ${res.statusCode} in ${ms} ms`);
-  });
+  console.log("Request method:", req.method);
+  console.log("Request URL:", req.url);
   next();
 }
 
 app.use(logger);
 
-app.get("/", (req, res) => {
+app.get("/", function (req, res) {
   res.send("Hello");
 });
 
-app.listen(port, () => {
-  console.log(`Listening on http://localhost:${port}`);
+app.listen(port, function () {
+  console.log("Listening on http://localhost:" + port);
 });

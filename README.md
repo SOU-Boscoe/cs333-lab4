@@ -1,216 +1,373 @@
 # cs333-lab4
-Node on your own machine, then Express middleware: a QR code generator and a Band Name Generator 🎸
+Node on your own computer: a QR code generator, then a Band Name Generator server 🎸
 
 Do each step below, and **answer the questions right here in this `README.md` file** as you go (type your answers under each question).
 
-- **Part 1 — Monday Oct 19, self-guided (no class, I'm at a conference).** Node, files, npm, and a command-line QR code generator.
-- **Part 2 — after Wednesday's class.** Express middleware, built up one file at a time into a Band Name Generator.
+- **Part 1 — Monday Oct 19, on your own (no class, I'm at a conference).** Run JavaScript on your computer with Node, and build a program that turns a web address into a QR code.
+- **Part 2 — after Wednesday's class.** A small Express server, built in four steps, that makes up band names.
 
-**How this lab works (two links to hand in, plus your landing page):**
+Every step gives you the code. Type it in (typing it is how it sticks), run it, then do the small **TODO** or answer the question.
+
+**How this lab works (two links to hand in):**
 - **Your code:** make your own copy of this lab (click **Use this template**, or clone it), do your work, and **push it to your own GitHub repo**.
-- **Your landing page** on `lampforall`, updated with Lab 4 (see the end).
+- **Your landing page** on `lampforall`, with Lab 4 added (the last step).
 
-This lab runs **on your computer**, not on `lampforall`. Our shared server only serves files you upload; it doesn't run Node programs for you. Later in the term we build servers that can.
+This lab runs **on your computer**. Our `lampforall` server only hands out the files you upload; it can't run Node programs.
 
-**When you get stuck on Monday**, post in the Slack lab thread with (1) the command you ran, (2) the **exact** error text, copied, and (3) what you already tried. Answering a classmate's question counts as doing the lab well. Check the **Stuck?** table at the bottom first.
+**Stuck on Monday?** Look at the **Stuck?** table at the bottom first. Then post in the Slack lab thread: (1) the command you ran, (2) the **exact** error, copied and pasted, (3) what you already tried. Helping a classmate counts too.
 
 ---
 
-# Part 1: Node on your machine (Monday, about 2 hours)
+# Part 1: Node on your computer (Monday, about 2 hours)
 
-Until now all of your JavaScript ran inside a browser. Today it runs on your computer, with no page at all.
+So far all your JavaScript ran inside a web page. **Node** runs JavaScript on your computer, with no web page at all, so it can do things a page can't, like save files.
 
-## Terminal and Node
+## 1. Open a terminal
 
-Use **Git Bash** on Windows (on the lab machines; at home install Git for Windows, or use WSL) or Terminal on a Mac. In VS Code: **Terminal → New Terminal**, then pick Git Bash from the **⌄** next to the **+**.
+In VS Code: **Terminal → New Terminal**. On Windows, click the **⌄** next to the **+** in the terminal panel and pick **Git Bash** (it's on the lab machines; at home, install "Git for Windows"). On a Mac the normal terminal is fine.
 
-| Command | Does |
+The commands you'll need today:
+
+| Type this | It does |
 | --- | --- |
-| `pwd` | where am I? |
-| `ls` | what's in this folder? |
-| `mkdir name` | make a folder |
-| `cd name` / `cd ..` | go into a folder / up one |
-| `code .` | open this folder in VS Code |
+| `pwd` | shows which folder you're in |
+| `ls` | lists what's in this folder |
+| `mkdir name` | makes a folder called `name` |
+| `cd name` | goes into the folder `name` |
+| `cd ..` | goes back up one folder |
+| `code .` | opens this folder in VS Code |
 
-1. Run `node --version` and `npm --version`. You need Node **22 or newer**; if it's older or "command not found", install the **LTS** from [nodejs.org](https://nodejs.org), then close and reopen the terminal.
-   What version do you have?
+## 2. Check Node is installed
 
-## The REPL
+```bash
+node --version
+```
 
-2. Type `node` and press Enter. The prompt changes to `>`. This is the **REPL**: Read, Evaluate, Print, Loop. Try:
-   ```
-   > 5 + 8
-   > "sou".toUpperCase()
-   > [3, 1, 2].map((n) => n * 10)
-   > process.version
-   > document
-   ```
-   `document` worked in the browser's console. What happens here, and why?
-   Leave with `.exit`.
+You should see something like `v22.11.0` or higher. If you see "command not found", or a number below 22, install the **LTS** version from [nodejs.org](https://nodejs.org), then close the terminal and open a new one.
 
-## Your first program
+**Question:** what version do you have?
 
-3. Make a practice folder **outside** this repo and open it:
-   ```bash
-   cd ~
-   mkdir node-practice
-   cd node-practice
-   code .
-   ```
-   Create `index.js` containing `console.log("Hello from Node!");` and run `node index.js`.
-4. Run it with `node --watch index.js` instead. Change the message and save: it reruns by itself. Stop it with **Ctrl+C**.
-   (Older tutorials install a package called `nodemon` for this. It's built into Node now.)
-5. Make a `package.json` and switch on ES modules:
-   ```bash
-   npm init -y
-   npm pkg set type=module
-   ```
-   Open `package.json` and find the `"type": "module"` line. With it, Node uses `import` / `export`, the same modules as `<script type="module">` in the browser.
-   Without it, Node expects the older **CommonJS** style: `const fs = require("fs")`. You'll see both in real code. What goes wrong if you mix them in one project? (Try it: put a `require` in your file and run it.)
+## 3. Try Node by itself
 
-## Files, with the `await` you learned last week
+Type `node` and press Enter. The prompt changes to `>`. Now Node runs each line you type:
 
-6. Replace `index.js` with:
-   ```js
-   import { writeFile, readFile } from "node:fs/promises";
+```
+> 5 + 8
+> "sou".toUpperCase()
+> document
+```
 
-   console.log("1. about to write");
-   await writeFile("message.txt", "Hello Node.js");
-   console.log("2. written");
+Type `.exit` to leave.
 
-   const text = await readFile("message.txt", "utf8");
-   console.log("3. read back:", text);
-   ```
-   Run it, and check `message.txt` appeared. (`node:` means "built into Node", not from npm.)
-7. Remove `"utf8"` from `readFile` and run it. What prints instead of your text? What does that tell you about what a file *is*? Put it back.
-8. Change the file name in `readFile` to `nope.txt`. What is the error **code** (a word in capitals)? Then wrap it in `try` / `catch` so it prints a friendly message instead of crashing.
-9. Find the function in the [Node `fs/promises` docs](https://nodejs.org/docs/latest/api/fs.html#promises-api) that **adds** to the end of a file instead of replacing it. Use it to add a line each time the program runs. Run it three times and check the file.
-   Which function was it?
-10. You'll also meet the older **callback** style in existing code:
-    ```js
-    import fs from "node:fs";
+**Question:** `document` worked in the browser's Console. What happens here, and why do you think that is?
 
-    fs.writeFile("message.txt", "Hello Node.js", (err) => {
-      if (err) throw err;
-      console.log("It's saved!");
-    });
-    console.log("This prints first");
-    ```
-    Why does "This prints first" print first? (Think back to the `A C B` puzzle.)
+## 4. Your first Node program
 
-## Choosing a package
+Make a practice folder and open it:
 
-[npmjs.com](https://www.npmjs.com) has millions of packages, and anyone can publish one. Two QR code packages come up in tutorials: **`qr-image`** and **`qrcode`**.
+```bash
+cd ~
+mkdir node-practice
+cd node-practice
+code .
+```
 
-11. Look both up on npmjs.com (and `npm view qr-image time` in the terminal) and fill this in:
+In VS Code, make a file called `index.js` with this in it:
 
-    | | `qr-image` | `qrcode` |
-    | --- | --- | --- |
-    | Weekly downloads | | |
-    | Last published | | |
-    | Open issues on GitHub | | |
-    | Can it save straight to a PNG? | | |
+```js
+console.log("Hello from Node!");
+```
 
-    Which would you choose for a project you had to keep running for years, and why? (We'll use `qrcode`: say whether you agree.)
+Save it, and in the terminal run:
 
-## The QR code generator
+```bash
+node index.js
+```
 
-Now work in **this repo**. `index.js` has the plan in a comment.
+The message prints in the terminal. Now try this instead:
 
-12. Set it up and install the packages:
-    ```bash
-    npm init -y
-    npm pkg set type=module
-    npm install qrcode @inquirer/prompts
-    ```
-    Look at what changed: `package.json` lists them under `"dependencies"`, `node_modules/` appeared, and so did `package-lock.json`.
-    `.gitignore` already contains `node_modules/`. Why should `node_modules` never go into git, and how does someone who clones your repo get the packages?
-13. **Ask for a URL.** In the [`@inquirer/prompts` docs](https://www.npmjs.com/package/@inquirer/prompts), find the `input` prompt. Ask for a URL, `await` the answer and `console.log` it.
-14. **Reject bad input.** `input` takes a `validate` option: a function that returns `true` for good input or a string to show as the error. `URL.canParse(value)` tells you whether something is a full URL. Make `sou.edu` get rejected and `https://sou.edu` accepted.
-15. **Make the image.** In the [`qrcode` docs](https://www.npmjs.com/package/qrcode), find `toFile`. It returns a promise, so you can `await` it. Save `qr.png`, open it, and scan it with your phone.
-16. **Name it after the site.** `new URL(url).hostname` turns `https://sou.edu/academics` into `sou.edu`. Save as `sou.edu.png` instead.
-17. **Keep a history.** Append each URL, with `new Date().toISOString()`, to `urls.txt` (the function from step 9).
-18. **Tell the user it worked**, and print the QR code in the terminal too: the `qrcode` docs have a way to render to a string with `type: "terminal"`.
-19. Make a QR code for **your landing page on `lampforall`** and keep the PNG in this repo: you'll use it at the end.
-20. Why can't this program run on a static web page like your `lampforall` site? What's different about where it runs?
+```bash
+node --watch index.js
+```
 
-Optional stretch:
-- Skip the prompt when the URL is given on the command line (`node index.js https://sou.edu`). Look up `parseArgs` in the `node:util` docs.
-- Save an `.svg` as well. Why might an SVG be better for a poster?
-- Colours: make one in SOU red, then check it still scans.
+**TODO:** change the message and save. It runs again by itself. Press **Ctrl+C** to stop it.
 
-**Commit as you go**, at least once per step from 13 to 18, with messages that say what works (`Validate URL input`).
+## 5. Turn the folder into a project
+
+```bash
+npm init -y
+npm pkg set type=module
+```
+
+- `npm init -y` makes a file called `package.json` that describes your project
+- `npm pkg set type=module` adds the line `"type": "module"` to it, which lets you use `import`
+
+**TODO:** open `package.json` and find the `"type": "module"` line.
+
+## 6. Save and read a file
+
+Node can do something a web page can't: write files on your computer. Replace everything in `index.js` with:
+
+```js
+import { writeFile, readFile } from "node:fs/promises";
+
+await writeFile("message.txt", "Hello from a file!");
+console.log("I wrote the file");
+
+const text = await readFile("message.txt", "utf8");
+console.log("The file says:", text);
+```
+
+Run it with `node index.js`. A new `message.txt` appears in your folder. Open it.
+
+- `node:fs/promises` is Node's built-in **f**ile **s**ystem tool
+- `await` works the same as Wednesday's `fetch`: wait for the slow thing (the disk), then carry on
+
+**TODO 1:** change the file name in `readFile` to `nope.txt` and run it. Read the red error.
+**Question:** what is the error code? (It's a word in capitals.)
+
+**TODO 2:** fix the crash with `try` / `catch`, the same as Wednesday. Replace the last two lines with:
+
+```js
+try {
+  const text = await readFile("nope.txt", "utf8");
+  console.log("The file says:", text);
+} catch (error) {
+  console.log("Couldn't read the file:", error.code);
+}
+```
+
+Run it again: a friendly message instead of a crash.
+
+## 7. You'll see older code too
+
+Lots of Node code online is written the older way. It does the same thing; it just looks different:
+
+```js
+const fs = require("fs");
+
+fs.writeFile("message.txt", "Hello from a file!", function (err) {
+  if (err) throw err;
+  console.log("I wrote the file");
+});
+```
+
+- `require` instead of `import`
+- a **callback** instead of `await`, like Monday's `saveItem`
+
+You don't need to run this one. Just recognise it when you see it.
+
+## 8. Choosing a package
+
+**npm** is a huge library of code that other people wrote for you to use, called **packages**. Anyone can publish one, so it's worth checking before you pick one.
+
+There are two popular QR code packages. Look each one up on [npmjs.com](https://www.npmjs.com): **`qr-image`** and **`qrcode`**.
+
+**Question:** fill in this table.
+
+| | `qr-image` | `qrcode` |
+| --- | --- | --- |
+| Weekly downloads | | |
+| Last published (look on the right side of the page) | | |
+
+**Question:** which would you pick for a project you had to look after for years, and why? (We'll use `qrcode`.)
+
+## 9. The QR code generator
+
+Now work in **this repo**. Open it in VS Code, and in its terminal:
+
+```bash
+npm init -y
+npm pkg set type=module
+npm install qrcode @inquirer/prompts
+```
+
+- `qrcode` makes QR codes
+- `@inquirer/prompts` asks the user questions in the terminal
+
+**TODO:** look in your folder. `npm install` made a `node_modules` folder (the packages themselves) and a `package-lock.json`. Open `package.json`: find your two packages under `"dependencies"`.
+
+`node_modules` can be huge, so it never goes into git; `.gitignore` already keeps it out. Anyone who clones your repo runs `npm install` to get the packages back.
+
+Now build `index.js` one step at a time. **Run `node index.js` after each step.**
+
+**Step A: ask for a web address.** Replace everything in `index.js` with:
+
+```js
+import { input } from "@inquirer/prompts";
+
+const url = await input({ message: "Which website should the QR code point to?" });
+console.log("You typed:", url);
+```
+
+**Step B: make the QR code.** Add `import QRCode from "qrcode";` under the first line, and add this at the bottom:
+
+```js
+await QRCode.toFile("qr.png", url);
+console.log("Saved qr.png");
+```
+
+Run it, type `https://sou.edu`, then open `qr.png` and scan it with your phone camera.
+
+**Step C: check the address.** Change the `input` line so it checks what was typed:
+
+```js
+const url = await input({
+  message: "Which website should the QR code point to?",
+  validate: function (value) {
+    if (URL.canParse(value)) {
+      return true;
+    }
+    return "Type the whole address, starting with https://";
+  },
+});
+```
+
+**TODO:** run it and type `sou.edu`. What happens? Then type `https://sou.edu`.
+
+**Step D: name the file after the website.** Replace your `toFile` and `console.log` lines with:
+
+```js
+const filename = new URL(url).hostname + ".png";
+await QRCode.toFile(filename, url);
+console.log("Saved", filename);
+```
+
+`new URL(url).hostname` turns `https://sou.edu/academics` into `sou.edu`.
+
+**Step E: keep a list of every address.** Add `import { appendFile } from "node:fs/promises";` to the top, and at the bottom:
+
+```js
+await appendFile("urls.txt", url + "\n");
+console.log("Added it to urls.txt");
+```
+
+`appendFile` adds to the end of a file instead of replacing it. **TODO:** run it three times with different addresses, then open `urls.txt`.
+
+**Step F: show the QR code in the terminal too.** Add at the bottom:
+
+```js
+const picture = await QRCode.toString(url, { type: "terminal", small: true });
+console.log(picture);
+```
+
+**TODO:** make a QR code for **your landing page** on `lampforall`, and keep the PNG in this repo. You'll use it at the end.
+
+**Question:** this program can't run on your `lampforall` website. Why not? (Hint: step 3.)
+
+**Commit** after each step that works, with a message that says what works (`Ask for a URL`, `Save the QR code`, ...).
+
+**Optional extra:** make an SVG instead of a PNG: change the file name to end in `.svg`. Why might an SVG be better for printing on a poster?
 
 ---
 
-# Part 2: Express middleware (after Wednesday)
+# Part 2: Express (after Wednesday)
 
-Everything is in the **`Middleware/`** folder: a form in `public/index.html`, four exercises `index1.js` to `index4.js`, and the finished version of each in `solution1.js` to `solution4.js`.
+Everything is in the **`Middleware/`** folder: a form in `public/index.html`, four starter files `index1.js` to `index4.js`, and a finished version of each, `solution1.js` to `solution4.js`.
 
-Do `index1.js` first, then compare with `solution1.js`; then `index2.js`, and so on. **Type it, don't paste it.** By `index4.js` you'll have a working Band Name Generator.
+Work through them in order. For each one: **type** the new lines into `indexN.js` (don't paste the solution), run it, test it, then compare with `solutionN.js`.
 
-21. Install and run the first one:
-    ```bash
-    cd Middleware
-    npm install
-    npm run dev1
-    ```
-    `npm run dev1` is `node --watch index1.js`: look in `package.json`. Open `http://localhost:3000`. You should see the form.
-    Which line of `index1.js` makes the form appear, and where does that file live?
-22. Install the **REST Client** extension in VS Code and open `Middleware/requests.http`. Click **Send Request** above the first request. That's how you'll test routes from now on, without clicking through the browser each time.
+Set up once:
 
-### index1.js: receiving a form
+```bash
+cd Middleware
+npm install
+```
 
-23. Submit the form in the browser. What does the page say, and what does the server terminal show?
-24. Add a `POST /submit` route that `console.log`s `req.body` and sends back a short reply. Submit again.
-    What is `req.body`?
-25. Add `app.use(express.urlencoded());` near the top and submit again. What changed, and what does this middleware do?
-    (Older tutorials install a package called `body-parser` for this. It's been built into Express since 2017.)
-26. Send the second request in `requests.http`. What happens if you remove the `res.send(...)` line from your route and send it again?
+To run a file: `npm run dev1` (or `dev2`, `dev3`, `dev4`). That runs `node --watch` on it, so it restarts every time you save. Open `http://localhost:3000`. **Ctrl+C** stops it.
 
-### index2.js: logging with `morgan`
+**Comment each `indexN.js`** in your own words: what each line does. I'm looking for this.
 
-27. Stop `dev1` (Ctrl+C) and run `npm run dev2`. Add `morgan("dev")` as middleware (`import morgan from "morgan";` then `app.use(morgan("dev"));`). Load the page from the browser and from `requests.http`.
-    What does each part of a log line mean?
-28. Try `morgan("combined")`. What extra information does it log, and which line tells you whether a request came from the browser or from REST Client?
+## index1.js: receive a form
 
-### index3.js: your own middleware
+10. Run `npm run dev1` and open `http://localhost:3000`. You see the form. Fill it in and press the button.
+    **Question:** what does the page say?
 
-29. Run `npm run dev3`. It crashes straight away: read the error. `index3.js` uses a `logger` function that doesn't exist yet. Write it above the `app.use(logger)` line: a function `(req, res, next)` that logs `req.method` and `req.url`, then calls `next()`.
-30. Delete `next();` and reload the page. What happens, and why?
-31. Look at `solution3.js`: its logger also times each request with `res.on("finish", ...)`. That's an **event listener**, on the server. When does it run?
-
-### index4.js: the Band Name Generator
-
-32. Run `npm run dev4` and build the whole thing from the empty `index4.js`: `morgan`, `express.urlencoded()`, `express.static("public")`, and a `POST /submit` route that replies with the band name: street name + pet name.
-33. Write the name-making step as **its own middleware function** that runs only for `/submit`:
+11. Add a route for the form. Type this above `app.listen`:
     ```js
-    app.post("/submit", bandNameGenerator, (req, res) => { ... });
+    app.post("/submit", function (req, res) {
+      console.log(req.body);
+      res.send("Got it! Look at the server terminal.");
+    });
     ```
-    It puts the name on `res.locals.bandName` for the route to use. Compare with `solution4.js`.
-34. **Validate:** if either field is missing or blank, reply with status **400** and a message. Test it with the third request in `requests.http`.
-35. Send the fourth request in `requests.http`: it puts a `<script>` in the street name. What would happen if you put user input straight into the HTML you send back? How does `solution4.js` stop that?
-36. An older version of this lab kept the band name in a variable **outside** the functions:
+    Submit the form again. **Question:** what does the server terminal print for `req.body`?
+
+12. Add this line under `const port = 3000;`:
     ```js
-    let bandName = "";
+    app.use(express.urlencoded());
     ```
-    Why is that a bug once two people use the site at the same moment?
+    Submit again. **Question:** what does the terminal print now? What did `express.urlencoded()` do?
 
-Optional stretch:
-- Add a `/history` route that lists every band name made since the server started, newest first.
-- Save the history to a JSON file with `node:fs/promises`, so it survives a restart.
-- Turn the form into a `fetch` call (like Lab 3), sending JSON to a `POST /api/band-name` route that answers with `res.json(...)`. Show the result without a page reload.
+13. **Test without the browser.** Install the **REST Client** extension in VS Code, open `Middleware/requests.http`, and click **Send Request** above the second request. The answer opens on the right.
+    **TODO:** change `Biscuit` to another pet name in `requests.http` and send it again. Look at the server terminal.
 
-**Comment each `indexN.js`** to show you understand it: what each middleware does, and why it's in that order. These are not typical comments: they're to show me you read up on the pieces.
+## index2.js: log every request with morgan
+
+14. Stop the server (Ctrl+C) and run `npm run dev2`. Add these two lines to `index2.js`: the `import` at the top, the `app.use` under `const port = 3000;`:
+    ```js
+    import morgan from "morgan";
+    ```
+    ```js
+    app.use(morgan("dev"));
+    ```
+    Reload `http://localhost:3000` a few times and look at the terminal.
+    **Question:** a log line looks like `GET / 200 3.1 ms - 5`. What do you think each part means?
+
+## index3.js: write your own middleware
+
+15. Run `npm run dev3`. It crashes straight away. **Question:** what does the error say?
+
+16. Fix it: type this function above `app.use(logger);`:
+    ```js
+    function logger(req, res, next) {
+      console.log("Request method:", req.method);
+      console.log("Request URL:", req.url);
+      next();
+    }
+    ```
+    Reload the page and look at the terminal.
+
+17. **TODO:** put `//` in front of `next();` and reload the page. **Question:** what happens in the browser? Why? Then take the `//` away.
+
+## index4.js: the Band Name Generator
+
+18. Run `npm run dev4`. `index4.js` is nearly empty. Under `const port = 3000;`, type the setup from the last three files:
+    ```js
+    app.use(morgan("dev"));
+    app.use(express.urlencoded());
+    app.use(express.static("public"));
+    ```
+    and add `import morgan from "morgan";` at the top.
+
+19. Add the route that makes the band name, above `app.listen`:
+    ```js
+    app.post("/submit", function (req, res) {
+      const bandName = req.body.street + " " + req.body.pet;
+      console.log("Band name:", bandName);
+      res.send("<h1>Your band name is:</h1><h2>" + bandName + "</h2>");
+    });
+    ```
+    Fill in the form. You have a Band Name Generator!
+
+20. **TODO:** type `<b>Maple</b>` as the street name. **Question:** what happens, and why is that the same problem as Week 3's `innerHTML`?
+
+21. Now look at `solution4.js`. It fixes that with `escapeHtml`, and it moves the band-name step into its own middleware, `bandNameGenerator`, which only runs for `/submit`. Copy those two functions into your `index4.js` and change your route to match `solution4.js`.
+    **Question:** what does `bandNameGenerator` do when a box is empty? Test it with the third request in `requests.http`.
+
+**Commit** after each `indexN.js` works.
+
+Optional extras:
+- Add a `GET /about` route that sends back a sentence about your band.
+- Keep a list of every band name made since the server started, and show it at `GET /history`.
 
 ---
 
 # Hand it in
 
-37. Add Lab 4 to your landing page: a short description, your QR code image from step 19, and a link to this repo on GitHub (it runs on your computer, so there's no live version to link).
-38. SFTP the updated landing page and the QR image to `lampforall`. Scan the QR code on the live page with your phone: does it go where it should?
-39. Push this repo (code **and** this README with your answers) to **your own GitHub repo**.
-40. Submit in Moodle: (1) your GitHub repo and (2) your landing page.
+22. Add Lab 4 to your landing page: a sentence about what it does, your QR code image from step 9, and a link to this repo on GitHub (it runs on your computer, so there's no live version to link to).
+23. SFTP the updated landing page and the QR code image to `lampforall`. Scan the QR code on the live page with your phone: does it go where it should?
+24. Push this repo (code **and** this README with your answers) to **your own GitHub repo**.
+25. Submit in Moodle: (1) your GitHub repo link and (2) your landing page link.
 
 ---
 
@@ -218,16 +375,14 @@ Optional stretch:
 
 | You see | What's going on | Fix |
 | --- | --- | --- |
-| `node: command not found` / `'node' is not recognized` | Node isn't installed, or the terminal was open before you installed it | Install the LTS, then **close and reopen** the terminal and VS Code |
-| `Cannot use import statement outside a module` | No `"type": "module"` in `package.json` | `npm pkg set type=module` |
-| `require is not defined in ES module scope` | CommonJS code in an ES module project | Change `require` to `import` |
-| `Cannot find package 'qrcode'` / `ERR_MODULE_NOT_FOUND` | Not installed, or installed in another folder | `pwd`: are you in the project folder? Then `npm install` |
-| `ENOENT: no such file or directory` | Relative paths start from the folder you ran `node` **from** | `pwd`, `ls`, and run from the project folder |
-| `package.json` ended up in the wrong place | You weren't in the project folder when you ran `npm init` | Delete it, `cd` to the right folder, run it again |
-| `running scripts is disabled on this system` | PowerShell is blocking npm | Use **Git Bash** as your VS Code terminal |
-| `EACCES: permission denied` on `npm install -g …` | Global installs need admin | Nothing in this lab needs `-g`: install inside the project |
-| `EADDRINUSE: address already in use :::3000` | Another server is still running, often in a forgotten terminal tab | Ctrl+C or close (🗑) every terminal tab. Still stuck: Mac/Git Bash `lsof -i :3000` then `kill <PID>`; or run on another port: `PORT=3001 npm run dev4` |
-| The browser spins forever | A route never sends a response, or a middleware never calls `next()` | Every request must end in `res.send` / `res.json` / `res.status(...).end()` |
-| `req.body` is `undefined` | No body-parsing middleware, or it's added **after** the route | `app.use(express.urlencoded())` above your routes |
-| `Cannot GET /something` | No route or file for that path | Check the path and the method (GET vs POST) |
-| `Unexpected token` in `package.json` | A missing or extra comma | Every line but the last inside `{ }` ends with a comma |
+| `node: command not found` / `'node' is not recognized` | Node isn't installed, or the terminal was opened before you installed it | Install the LTS from nodejs.org, then **close and reopen** VS Code |
+| `Cannot use import statement outside a module` | `package.json` has no `"type": "module"` | Run `npm pkg set type=module` |
+| `require is not defined in ES module scope` | You pasted older code (step 7) into a module project | Change `require` to `import` |
+| `Cannot find package 'qrcode'` | The package isn't installed in *this* folder | Run `pwd` to check where you are, then `npm install` |
+| `ENOENT: no such file or directory` | Node looks for files in the folder you ran it **from** | `cd` into your project folder and run it again |
+| `running scripts is disabled on this system` | Windows PowerShell is blocking npm | Switch the terminal to **Git Bash** (step 1) |
+| `EADDRINUSE: address already in use :::3000` | A server is still running, maybe in another terminal tab | Press Ctrl+C in every terminal tab, or close them with the 🗑 |
+| The browser spins forever | A route never sends anything back, or a middleware forgot `next()` | Every route needs a `res.send(...)` |
+| `req.body` is `undefined` | `app.use(express.urlencoded());` is missing, or it's below your route | Put it near the top, above the routes |
+| `Cannot GET /something` | There's no route or file for that address | Check the spelling, and `get` vs `post` |
+| The terminal seems stuck | Your program is still running (waiting for input, or `--watch`) | Ctrl+C |
