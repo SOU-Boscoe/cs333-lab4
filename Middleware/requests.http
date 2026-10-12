@@ -1,0 +1,20 @@
+### The form page
+GET http://localhost:3000/
+
+### Submit the form the way a browser does
+POST http://localhost:3000/submit
+Content-Type: application/x-www-form-urlencoded
+
+street=Maple&pet=Biscuit
+
+### Missing a field → expect 400 (solution 4)
+POST http://localhost:3000/submit
+Content-Type: application/x-www-form-urlencoded
+
+street=Maple
+
+### Script in the input → should come back as text, not run (solution 4)
+POST http://localhost:3000/submit
+Content-Type: application/x-www-form-urlencoded
+
+street=<script>alert(1)</script>&pet=Rex
