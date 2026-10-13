@@ -12,7 +12,7 @@ Every step gives you the code. Type it in (typing it is how it sticks), run it, 
 - **Your code:** make your own copy of this lab (click **Use this template**, or clone it), do your work, and **push it to your own GitHub repo**.
 - **Your landing page** on `lampforall`, with Lab 4 added (the last step).
 
-This lab runs **on your computer**. Our `lampforall` server only hands out the files you upload; it can't run Node programs. (Why can't our lampforall run Node?)
+This lab runs **on your computer**. Our `lampforall` server only hands out the files you upload; it can't run Node programs. **Question 1**: Why can't our lampforall run Node?
 
 **Stuck on Monday?** Look at the **Stuck?** table at the bottom first. Then post in the Slack lab thread: (1) the command you ran, (2) the **exact** error, copied and pasted, (3) what you already tried. Helping a classmate counts too.
 
@@ -26,7 +26,7 @@ So far all your JavaScript ran inside a web page. **Node** runs JavaScript on yo
 
 In VS Code: **Terminal → New Terminal**. On Windows, click the **⌄** next to the **+** in the terminal panel and pick **Git Bash** (it's on the lab machines; at home, install "Git for Windows"). On a Mac the normal terminal is fine.
 
-The commands you'll need today:
+The commands you'll need today (hopefully review):
 
 | Type this | It does |
 | --- | --- |
@@ -45,7 +45,7 @@ node --version
 
 You should see something like `v22.11.0` or higher. If you see "command not found", or a number below 22, install the **LTS** version from [nodejs.org](https://nodejs.org), then close the terminal and open a new one.
 
-**Question:** what version do you have?
+**Question 2:** what version do you have?
 
 ## 3. Try Node by itself
 
@@ -59,7 +59,7 @@ Type `node` and press Enter. The prompt changes to `>`. Now Node runs each line 
 
 Type `.exit` to leave.
 
-**Question:** `document` worked in the browser's Console. What happens here, and why do you think that is?
+**Question 3:** `document` worked in the browser's Console. What happens here, and why do you think that is?
 
 ## 4. Your first Node program
 
@@ -89,6 +89,7 @@ The message prints in the terminal. Now try this instead:
 ```bash
 node --watch index.js
 ```
+**Question 4:** What does the flag watch do?
 
 **TODO:** change the message and save. It runs again by itself. Press **Ctrl+C** to stop it.
 
@@ -121,10 +122,10 @@ console.log("The file says:", text);
 Run it with `node index.js`. A new `message.txt` appears in your folder. Open it.
 
 - `node:fs/promises` is Node's built-in **f**ile **s**ystem tool
-- `await` works the same as Wednesday's `fetch`: wait for the slow thing (the disk), then carry on
+- `await` works the same as last Wednesday's `fetch`: wait for the slow thing (the disk), then carry on
 
 **TODO 1:** change the file name in `readFile` to `nope.txt` and run it. Read the red error.
-**Question:** what is the error code? (It's a word in capitals.)
+**Question 5:** what is the error code? (It's a word in capitals.)
 
 **TODO 2:** fix the crash with `try` / `catch`, the same as Wednesday. Replace the last two lines with:
 
@@ -138,6 +139,7 @@ try {
 ```
 
 Run it again: a friendly message instead of a crash.
+**Question 6:** How does try/catch in js work with await? Just describe the above example in your own words.
 
 ## 7. You'll see older code too
 
@@ -163,14 +165,14 @@ You don't need to run this one. Just recognise it when you see it.
 
 There are two popular QR code packages. Look each one up on [npmjs.com](https://www.npmjs.com): **`qr-image`** and **`qrcode`**.
 
-**Question:** fill in this table.
+**Question 7:** fill in this table.
 
 | | `qr-image` | `qrcode` |
 | --- | --- | --- |
 | Weekly downloads | | |
 | Last published (look on the right side of the page) | | |
 
-**Question:** which would you pick for a project you had to look after for years, and why? (We'll use `qrcode`.)
+**Question 8:** which would you pick for a project you had to look after for years, and why? (We'll use `qrcode`.)
 
 ## 9. The QR code generator
 
@@ -253,7 +255,7 @@ console.log(picture);
 
 **TODO:** make a QR code for **your landing page** on `lampforall`, and keep the PNG in this repo. You'll use it at the end.
 
-**Question:** this program can't run on your `lampforall` website. Why not? (Hint: step 3.)
+This program can't run on your `lampforall` website. (you answered why this is the case above)
 
 **Commit** after each step that works, with a message that says what works (`Ask for a URL`, `Save the QR code`, ...).
 
@@ -281,7 +283,7 @@ To run a file: `npm run dev1` (or `dev2`, `dev3`, `dev4`). That runs `node --wat
 ## index1.js: receive a form
 
 10. Run `npm run dev1` and open `http://localhost:3000`. You see the form. Fill it in and press the button.
-    **Question:** what does the page say?
+    **Question 9:** what does the page say?
 
 11. Add a route for the form. Type this above `app.listen`:
     ```js
@@ -290,13 +292,13 @@ To run a file: `npm run dev1` (or `dev2`, `dev3`, `dev4`). That runs `node --wat
       res.send("Got it! Look at the server terminal.");
     });
     ```
-    Submit the form again. **Question:** what does the server terminal print for `req.body`?
+    Submit the form again. **Question 10:** what does the server terminal print for `req.body`?
 
 12. Add this line under `const port = 3000;`:
     ```js
     app.use(express.urlencoded());
     ```
-    Submit again. **Question:** what does the terminal print now? What did `express.urlencoded()` do?
+    Submit again. **Question 11:** what does the terminal print now? What did `express.urlencoded()` do?
 
 13. **Test without the browser.** Install the **REST Client** extension in VS Code, open `Middleware/requests.http`, and click **Send Request** above the second request. The answer opens on the right.
     **TODO:** change `Biscuit` to another pet name in `requests.http` and send it again. Look at the server terminal.
@@ -311,11 +313,11 @@ To run a file: `npm run dev1` (or `dev2`, `dev3`, `dev4`). That runs `node --wat
     app.use(morgan("dev"));
     ```
     Reload `http://localhost:3000` a few times and look at the terminal.
-    **Question:** a log line looks like `GET / 200 3.1 ms - 5`. What do you think each part means?
+    **Question 12:** a log line looks like `GET / 200 3.1 ms - 5`. What do you think each part means?
 
 ## index3.js: write your own middleware
 
-15. Run `npm run dev3`. It crashes straight away. **Question:** what does the error say?
+15. Run `npm run dev3`. It crashes straight away. **Question 13:** what does the error say?
 
 16. Fix it: type this function above `app.use(logger);`:
     ```js
@@ -327,7 +329,7 @@ To run a file: `npm run dev1` (or `dev2`, `dev3`, `dev4`). That runs `node --wat
     ```
     Reload the page and look at the terminal.
 
-17. **TODO:** put `//` in front of `next();` and reload the page. **Question:** what happens in the browser? Why? Then take the `//` away.
+17. **TODO:** put `//` in front of `next();` and reload the page. **Question 14:** what happens in the browser? Why? Then take the `//` away.
 
 ## index4.js: the Band Name Generator
 
@@ -349,10 +351,10 @@ To run a file: `npm run dev1` (or `dev2`, `dev3`, `dev4`). That runs `node --wat
     ```
     Fill in the form. You have a Band Name Generator!
 
-20. **TODO:** type `<b>Maple</b>` as the street name. **Question:** what happens, and why is that the same problem as Week 3's `innerHTML`?
+20. **TODO:** type `<b>Maple</b>` as the street name. **Question 15:** what happens, and why is that the same problem as Week 3's `innerHTML`?
 
 21. Now look at `solution4.js`. It fixes that with `escapeHtml`, and it moves the band-name step into its own middleware, `bandNameGenerator`, which only runs for `/submit`. Copy those two functions into your `index4.js` and change your route to match `solution4.js`.
-    **Question:** what does `bandNameGenerator` do when a box is empty? Test it with the third request in `requests.http`.
+    **Question 16:** what does `bandNameGenerator` do when a box is empty? Test it with the third request in `requests.http`.
 
 **Commit** after each `indexN.js` works.
 
@@ -406,7 +408,7 @@ The Band Name Generator has no style at all yet. Give it some.
      cursor: pointer;
    }
    ```
-   The same ideas as Lab 3 work here too: your own colours, a Google Font, dark mode.
+   The same ideas as Lab 3 work here too: your own colours (written this way for Tristan), a Google Font, dark mode.
 
 3. **The answer page.** The page that shows the band name is built in `index4.js`, inside `res.send(...)`. Add the stylesheet to the start of that string so it gets your style too:
    ```js
@@ -419,8 +421,8 @@ The Band Name Generator has no style at all yet. Give it some.
 
 # Hand it in
 
-22. Add Lab 4 to your landing page: a sentence about what it does, your QR code image from step 9, and a link to this repo on GitHub (it runs on your computer, so there's no live version to link to).
-23. SFTP the updated landing page and the QR code image to `lampforall`. Scan the QR code on the live page with your phone: does it go where it should?
+22. Add Lab 4 to your landing page: a sentence about what it does, show your QR code image you created.
+23. SFTP the updated landing page and the QR code image to `lampforall`. Scan the QR code on the live page with your phone: does it go where it should? (it should NOT go to google.com)
 24. Push this repo (code **and** this README with your answers) to **your own GitHub repo**.
 25. Submit in Moodle: (1) your GitHub repo link and (2) your landing page link.
 
