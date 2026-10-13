@@ -89,7 +89,8 @@ The message prints in the terminal. Now try this instead:
 ```bash
 node --watch index.js
 ```
-**Question 4:** What does the flag watch do?
+
+**Question 4:** What does the `--watch` flag do?
 
 **TODO:** change the message and save. It runs again by itself. Press **Ctrl+C** to stop it.
 
@@ -125,9 +126,10 @@ Run it with `node index.js`. A new `message.txt` appears in your folder. Open it
 - `await` works the same as last Wednesday's `fetch`: wait for the slow thing (the disk), then carry on
 
 **TODO 1:** change the file name in `readFile` to `nope.txt` and run it. Read the red error.
+
 **Question 5:** what is the error code? (It's a word in capitals.)
 
-**TODO 2:** fix the crash with `try` / `catch`, the same as Wednesday. Replace the last two lines with:
+**TODO 2:** fix the crash with `try` / `catch`, the same as last Wednesday. Replace the last two lines with:
 
 ```js
 try {
@@ -139,6 +141,7 @@ try {
 ```
 
 Run it again: a friendly message instead of a crash.
+
 **Question 6:** How does try/catch in js work with await? Just describe the above example in your own words.
 
 ## 7. You'll see older code too
