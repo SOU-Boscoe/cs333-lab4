@@ -12,7 +12,7 @@ Every step gives you the code. Type it in (typing it is how it sticks), run it, 
 - **Your code:** make your own copy of this lab (click **Use this template**, or clone it), do your work, and **push it to your own GitHub repo**.
 - **Your landing page** on `lampforall`, with Lab 4 added (the last step).
 
-This lab runs **on your computer**. Our `lampforall` server only hands out the files you upload; it can't run Node programs.
+This lab runs **on your computer**. Our `lampforall` server only hands out the files you upload; it can't run Node programs. (Why can't our lampforall run Node?)
 
 **Stuck on Monday?** Look at the **Stuck?** table at the bottom first. Then post in the Slack lab thread: (1) the command you ran, (2) the **exact** error, copied and pasted, (3) what you already tried. Helping a classmate counts too.
 
