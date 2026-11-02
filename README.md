@@ -3,7 +3,7 @@ Node on your own computer: a QR code generator, then a Band Name Generator serve
 
 Do each step below, and **answer the questions right here in this `README.md` file** as you go (type your answers under each question).
 
-- **Part 1 — Monday Oct 19, on your own (no class, I'm at a conference).** Run JavaScript on your computer with Node, and build a program that turns a web address into a QR code.
+- **Part 1 — Node on your computer.** Run JavaScript on your computer with Node, and build a program that turns a web address into a QR code.
 - **Part 2 — after Wednesday's class.** A small Express server, built in four steps, that makes up band names.
 
 Every step gives you the code. Type it in (typing it is how it sticks), run it, then do the small **TODO** or answer the question.
@@ -14,11 +14,11 @@ Every step gives you the code. Type it in (typing it is how it sticks), run it, 
 
 This lab runs **on your computer**. Our `lampforall` server only hands out the files you upload; it can't run Node programs. **Question 1**: Why can't our lampforall run Node?
 
-**Stuck on Monday?** Look at the **Stuck?** table at the bottom first. Then post in the Slack lab thread: (1) the command you ran, (2) the **exact** error, copied and pasted, (3) what you already tried. Helping a classmate counts too.
+**Stuck?** Look at the **Stuck?** table at the bottom first. Then post in the Slack lab thread: (1) the command you ran, (2) the **exact** error, copied and pasted, (3) what you already tried. Helping a classmate counts too.
 
 ---
 
-# Part 1: Node on your computer (Monday, about 2 hours)
+# Part 1: Node on your computer (about 2 hours)
 
 So far all your JavaScript ran inside a web page. **Node** runs JavaScript on your computer, with no web page at all, so it can do things a page can't, like save files.
 
